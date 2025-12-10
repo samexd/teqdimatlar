@@ -1,0 +1,608 @@
+<!DOCTYPE html>
+<html lang="az">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>C++ Error Handling - Yolçuyev Səməd</title>
+    <style>
+        /* --- VS CODE DARK THEME (COMPACT VERSION) --- */
+        :root {
+            --bg-color: #121212;
+            --card-bg: #1e1e1e;
+            --text-color: #cccccc;
+            --keyword: #4d94d1;       
+            --string: #c5866d;        
+            --class: #41bda2;         
+            --comment: #608b4e;       
+            --accent: #0066aa;        
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Consolas', 'Courier New', monospace;
+        }
+
+        body {
+            background-color: #0a0a0a;
+            background-image: radial-gradient(circle at 50% 50%, #1a1a1a 0%, #0a0a0a 100%);
+            color: var(--text-color);
+            overflow: hidden;
+            font-size: 14px; /* Base font kiçildildi */
+        }
+
+        /* --- Progress Bar --- */
+        .progress-container {
+            position: fixed; top: 0; left: 0; width: 100%; height: 3px;
+            background: #000; z-index: 1000;
+        }
+        .progress-bar {
+            height: 100%;
+            background: var(--accent);
+            width: 0%;
+            transition: width 0.2s ease-out;
+        }
+
+        /* --- Slayd Strukturu --- */
+        .slides-container {
+            height: 100vh; width: 100%;
+            overflow-y: scroll;
+            scroll-snap-type: y mandatory;
+            scroll-behavior: smooth;
+        }
+
+        .slide {
+            height: 100vh; width: 100%;
+            scroll-snap-align: start;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 20px; /* Padding azaldıldı */
+            border-bottom: 1px solid rgba(255,255,255,0.03);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .content {
+            width: 85%; max-width: 1000px; /* Eni azaldıldı */
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px; /* Aralıq azaldıldı */
+            align-items: center;
+        }
+        .slide.center-layout .content { grid-template-columns: 1fr; text-align: center; }
+
+        /* --- Animasiyalar --- */
+        .content h2, .content p, .content li, .content .code-block, .uni-title, .plan-item {
+            opacity: 0;
+            transform: translateY(15px);
+            transition: all 0.5s ease-out;
+        }
+
+        .slide.active h2 { opacity: 1; transform: translateY(0); transition-delay: 0.1s; }
+        .slide.active p { opacity: 1; transform: translateY(0); transition-delay: 0.2s; }
+        .slide.active ul li { opacity: 1; transform: translateY(0); transition-delay: 0.3s; }
+        .slide.active .code-block { opacity: 1; transform: translateY(0); transition-delay: 0.4s; }
+
+        /* --- Typography (KİÇİLDİLMİŞ) --- */
+        h1 {
+            font-size: 2.8rem; /* 3.5-dən 2.8-ə endirildi */
+            color: var(--keyword);
+            margin-bottom: 15px;
+            text-shadow: 0 0 10px rgba(77, 148, 209, 0.2);
+        }
+
+        h2 {
+            font-size: 1.8rem; /* 2.2-dən 1.8-ə endirildi */
+            color: #e0e0e0; margin-bottom: 20px;
+            position: relative; display: inline-block;
+        }
+        h2::after {
+            content: ''; position: absolute;
+            width: 0; height: 2px; bottom: -5px; left: 0;
+            background: var(--accent);
+            transition: width 0.5s ease;
+        }
+        .slide.active h2::after { width: 100%; transition-delay: 0.6s; }
+
+        p { font-size: 1.05rem; line-height: 1.5; color: #aaaaaa; margin-bottom: 12px; }
+
+        ul li {
+            font-size: 1rem; margin-bottom: 8px; padding: 8px 12px;
+            border-radius: 6px; border-left: 2px solid transparent;
+            transition: all 0.2s;
+        }
+        ul li:hover {
+            background: rgba(255, 255, 255, 0.05);
+            transform: translateX(5px);
+            color: #fff; border-left: 2px solid var(--accent);
+        }
+
+        /* --- PLAN SEHIFESI (KİÇİK) --- */
+        .plan-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            width: 100%;
+            text-align: left;
+            margin-top: 20px;
+            font-size: 0.95rem;
+        }
+        
+        .plan-item {
+            background: #1a1a1a;
+            padding: 10px 15px; /* Padding azaldıldı */
+            border-radius: 6px;
+            border-left: 3px solid #333;
+            color: #aaa;
+            transition: 0.3s;
+            cursor: default;
+        }
+        
+        .plan-item:hover {
+            border-left-color: var(--accent);
+            background: #252526;
+            color: #fff;
+            transform: translateX(5px);
+        }
+
+        .slide.active .plan-item:nth-child(odd) { opacity: 1; transform: translateY(0); transition-delay: 0.2s; }
+        .slide.active .plan-item:nth-child(even) { opacity: 1; transform: translateY(0); transition-delay: 0.3s; }
+
+
+        /* --- KOD BLOKLARI (KİÇİK) --- */
+        .code-block {
+            background-color: #161616;
+            border: 1px solid #333;
+            border-radius: 8px;
+            padding: 20px; /* Padding azaldıldı */
+            font-size: 0.9rem; /* Kod fontu kiçildildi */
+            position: relative;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.4);
+        }
+        
+        .code-block:hover {
+            transform: translateY(-3px);
+            border-color: var(--accent);
+            transition: 0.3s;
+        }
+
+        .code-block::before {
+            content: "C++"; position: absolute; top: 0; right: 15px;
+            background: var(--accent); color: white; padding: 2px 8px; font-weight: bold; font-size: 0.7rem;
+            border-bottom-left-radius: 5px; border-bottom-right-radius: 5px; z-index: 2;
+        }
+
+        /* Syntax Colors */
+        .kwd { color: var(--keyword); font-weight: bold; }
+        .str { color: var(--string); }
+        .cls { color: var(--class); }
+        .cmt { color: var(--comment); font-style: italic; opacity: 0.7; }
+        .num { color: #b5cea8; }
+
+        /* Misc */
+        .uni-title {
+            font-size: 0.9rem; letter-spacing: 2px; color: #666;
+            text-transform: uppercase; margin-bottom: 10px; display: inline-block;
+        }
+        
+        .page-num {
+            position: absolute; bottom: 15px; left: 50%;
+            transform: translateX(-50%); color: #444; font-size: 0.9rem;
+        }
+        
+        /* --- Typewriter (Kiçik) --- */
+        .typewriter-text {
+            font-size: 3rem; /* 4rem-dən 3rem-ə endirildi */
+            color: var(--class);
+            font-weight: bold;
+            display: inline-block;
+        }
+        .cursor {
+            display: inline-block;
+            width: 10px;
+            height: 40px;
+            background-color: var(--class);
+            animation: blink 1s step-end infinite;
+            vertical-align: text-bottom;
+            margin-left: 5px;
+        }
+        @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
+
+    </style>
+</head>
+<body>
+
+<div class="progress-container">
+    <div class="progress-bar" id="progressBar"></div>
+</div>
+
+<div class="slides-container" id="slider">
+
+    <section class="slide center-layout">
+        <div class="content">
+            <div class="uni-title">Təqdimat İşi</div>
+            <h1>C++ Error Handling<br>& Exceptions</h1>
+            <div style="margin-top: 30px; padding: 20px 40px; border: 1px solid #333; border-radius: 10px; display: inline-block; background: #161616; text-align: center;">
+                <p style="margin: 5px 0; color:#888;">Universitet: <strong style="color:var(--text-color);">ADNSU</strong></p>
+                <p style="margin: 5px 0; color:#888;">Tələbə: <strong style="color:var(--text-color);">Yolçuyev Səməd</strong></p>
+                <p style="margin: 5px 0; color:#888;">Qrup: <strong style="color:var(--text-color);">681.25</strong></p>
+                <p style="margin: 5px 0; color:#888;">Tarix: <strong style="color:var(--text-color);">07.12.2025</strong></p>
+            </div>
+        </div>
+    </section>
+
+    <section class="slide center-layout">
+        <div class="content">
+            <h2 style="margin-bottom: 15px;">Təqdimatın Planı</h2>
+            <div class="plan-grid">
+                <div class="plan-item">1. Giriş: Xətaların İdarə Edilməsi</div>
+                <div class="plan-item">8. Standard Exceptions</div>
+                <div class="plan-item">2. Xətaların Növləri</div>
+                <div class="plan-item">9. Custom Exceptions</div>
+                <div class="plan-item">3. Error Handling Anlayışı</div>
+                <div class="plan-item">10. Exception Hierarchy</div>
+                <div class="plan-item">4. Exceptions Nədir?</div>
+                <div class="plan-item">11. Exception Safety</div>
+                <div class="plan-item">5. try-blok</div>
+                <div class="plan-item">12. Stack Unwinding</div>
+                <div class="plan-item">6. catch-blok</div>
+                <div class="plan-item">13. Multiple Catch</div>
+                <div class="plan-item">7. throw operatoru</div>
+                <div class="plan-item">14. Re-throwing</div>
+            </div>
+        </div>
+    </section>
+
+    <section class="slide">
+        <div class="content">
+            <div>
+                <h2>1. Giriş: Xətaların İdarə Edilməsi</h2>
+                <p>Məqsəd qəfil çökmələrin (crash) qarşısını almaq və proqramı dayanıqlı etməkdir.</p>
+                <ul>
+                    <li>Proqramın axınını qorumaq.</li>
+                    <li>Resurs sızmasının qarşısını almaq.</li>
+                    <li>İstifadəçiyə aydın mesaj vermək.</li>
+                </ul>
+            </div>
+            <div class="code-block">
+                <span class="cmt">// Təhlükəli kod nümunəsi</span><br>
+                <span class="kwd">int</span> total = <span class="num">100</span>;<br>
+                <span class="kwd">int</span> user_count = <span class="num">0</span>;<br><br>
+                <span class="cmt">// CRASH! Proqram burada dayanır:</span><br>
+                <span class="kwd">int</span> result = total / user_count;
+            </div>
+        </div>
+        <div class="page-num">1 / 14</div>
+    </section>
+
+    <section class="slide">
+        <div class="content">
+            <div>
+                <h2>2. Xətaların Növləri</h2>
+                <ul>
+                    <li><strong>Compile-time:</strong> Kodun qrammatik səhvləri.</li>
+                    <li><strong>Runtime:</strong> İşləmə zamanı yaranan real problemlər.</li>
+                    <li><strong>Logical:</strong> Proqram işləyir, amma nəticə səhvdir.</li>
+                </ul>
+            </div>
+            <div class="code-block">
+                <span class="cmt">// 1. Sintaksis (; yoxdur)</span><br>
+                <span class="kwd">int</span> x = <span class="num">5</span> <br><br>
+                <span class="cmt">// 2. Runtime (Null pointer)</span><br>
+                <span class="kwd">int</span>* ptr = <span class="kwd">nullptr</span>;<br>
+                <span class="kwd">cout</span> << *ptr; <span class="cmt">// Xəta!</span>
+            </div>
+        </div>
+        <div class="page-num">2 / 14</div>
+    </section>
+
+    <section class="slide">
+        <div class="content">
+            <div>
+                <h2>3. Error Handling Anlayışı</h2>
+                <p>Xətanı necə qarşılayırıq?</p>
+                <ul>
+                    <li><strong>Ənənəvi (C Stili):</strong> Funksiyalar xəta kodu (-1) qaytarır.</li>
+                    <li><strong>Müasir (C++ Exceptions):</strong> Xəta baş verəndə kodun normal axını dayanır və "catch" blokuna keçir.</li>
+                </ul>
+            </div>
+            <div class="code-block">
+                <span class="cmt">// C++ Stili</span><br>
+                <span class="kwd">try</span> {<br>
+                &nbsp;&nbsp;process_data();<br>
+                } <span class="kwd">catch</span> (...) {<br>
+                &nbsp;&nbsp;save_logs();<br>
+                }
+            </div>
+        </div>
+        <div class="page-num">3 / 14</div>
+    </section>
+
+    <section class="slide">
+        <div class="content">
+            <div>
+                <h2>4. Exceptions Nədir?</h2>
+                <p>Exception – proqramın normal gedişatını pozan bir obyektdir.</p>
+                <p>Xəta baş verdikdə, C++ onu tutacaq (catch) bir yer axtararaq funksiyalardan çıxır.</p>
+            </div>
+            <div class="code-block">
+                <span class="kwd">void</span> check_age(<span class="kwd">int</span> age) {<br>
+                &nbsp;&nbsp;<span class="kwd">if</span> (age < <span class="num">18</span>) {<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;<span class="kwd">throw</span> std::runtime_error(<span class="str">"Yetkin deyilsiniz!"</span>);<br>
+                &nbsp;&nbsp;}<br>
+                }
+            </div>
+        </div>
+        <div class="page-num">4 / 14</div>
+    </section>
+
+    <section class="slide">
+        <div class="content">
+            <div>
+                <h2>5. try-blok</h2>
+                <p>Xəta ehtimalı olan kodları <strong>`try`</strong> blokuna yazırıq.</p>
+                <p>Əgər xəta baş verərsə, blokun qalan hissəsi icra edilmir.</p>
+            </div>
+            <div class="code-block">
+                <span class="kwd">try</span> {<br>
+                &nbsp;&nbsp;open_database();<br>
+                &nbsp;&nbsp;process(); <span class="cmt">// Xəta burada ola bilər</span><br>
+                &nbsp;&nbsp;close(); <span class="cmt">// Bura çatmaya bilər</span><br>
+                }
+            </div>
+        </div>
+        <div class="page-num">5 / 14</div>
+    </section>
+
+    <section class="slide">
+        <div class="content">
+            <div>
+                <h2>6. catch-blok</h2>
+                <p><strong>`catch`</strong> bloku atılan xətanı tutur.</p>
+                <ul>
+                    <li>Mesajı ekrana çıxarır.</li>
+                    <li>Proqramı təhlükəsiz bağlayır.</li>
+                </ul>
+            </div>
+            <div class="code-block">
+                <span class="kwd">catch</span> (<span class="kwd">const</span> std::exception& e) {<br>
+                &nbsp;&nbsp;<span class="kwd">cerr</span> << <span class="str">"Xəta: "</span> << e.what();<br>
+                &nbsp;&nbsp;cleanup();<br>
+                }
+            </div>
+        </div>
+        <div class="page-num">6 / 14</div>
+    </section>
+
+    <section class="slide">
+        <div class="content">
+            <div>
+                <h2>7. throw operatoru</h2>
+                <p>Xəta vəziyyətini bildirmək üçün istifadə olunur.</p>
+                <p>İstənilən tip (int, string, class) atıla bilər.</p>
+            </div>
+            <div class="code-block">
+                <span class="kwd">if</span> (file_missing) {<br>
+                &nbsp;&nbsp;<span class="cmt">// Kod atmaq</span><br>
+                &nbsp;&nbsp;<span class="kwd">throw</span> <span class="num">404</span>;<br><br>
+                &nbsp;&nbsp;<span class="cmt">// Mətn atmaq</span><br>
+                &nbsp;&nbsp;<span class="kwd">throw</span> <span class="str">"Fayl yoxdur!"</span>;<br>
+                }
+            </div>
+        </div>
+        <div class="page-num">7 / 14</div>
+    </section>
+
+    <section class="slide">
+        <div class="content">
+            <div>
+                <h2>8. Standard Exceptions</h2>
+                <p>C++ `<stdexcept>` kitabxanası hazır siniflər verir.</p>
+                <ul>
+                    <li><span class="cls">std::out_of_range</span>: Massiv sərhəddi.</li>
+                    <li><span class="cls">std::invalid_argument</span>: Yanlış parametr.</li>
+                </ul>
+            </div>
+            <div class="code-block">
+                <span class="kwd">vector</span><<span class="kwd">int</span>> v(<span class="num">5</span>);<br>
+                <span class="kwd">try</span> {<br>
+                &nbsp;&nbsp;v.at(<span class="num">10</span>) = <span class="num">1</span>; <span class="cmt">// Sərhəd xətası</span><br>
+                } <span class="kwd">catch</span> (<span class="kwd">const</span> <span class="cls">out_of_range</span>& e) {<br>
+                &nbsp;&nbsp;<span class="kwd">cout</span> << e.what();<br>
+                }
+            </div>
+        </div>
+        <div class="page-num">8 / 14</div>
+    </section>
+
+    <section class="slide">
+        <div class="content">
+            <div>
+                <h2>9. Custom Exceptions</h2>
+                <p>Standart xətalar yetmədikdə, öz xəta sinifimizi yaradırıq.</p>
+                <p>`std::exception` sinifindən miras almaq ən yaxşı yoldur.</p>
+            </div>
+            <div class="code-block">
+                <span class="kwd">class</span> <span class="cls">DBError</span> : <span class="kwd">public</span> <span class="cls">std::exception</span> {<br>
+                <span class="kwd">public</span>:<br>
+                &nbsp;&nbsp;<span class="kwd">const char</span>* what() <span class="kwd">const noexcept</span> {<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;<span class="kwd">return</span> <span class="str">"DB Xətası!"</span>;<br>
+                &nbsp;&nbsp;}<br>
+                };
+            </div>
+        </div>
+        <div class="page-num">9 / 14</div>
+    </section>
+
+    <section class="slide">
+        <div class="content">
+            <div>
+                <h2>10. Exception Hierarchy</h2>
+                <p>Bütün xətaların "atası" <code>std::exception</code>-dır.</p>
+                <p>Polimorfizm sayəsində Base class ilə bütün xətaları tuta bilərik.</p>
+            </div>
+            <div class="code-block">
+                <span class="kwd">try</span> {<br>
+                &nbsp;&nbsp;<span class="cmt">// Kod...</span><br>
+                } <span class="kwd">catch</span> (<span class="kwd">const</span> <span class="cls">std::exception</span>& e) {<br>
+                &nbsp;&nbsp;<span class="cmt">// Bütün standart xətaları tutur</span><br>
+                &nbsp;&nbsp;<span class="kwd">cout</span> << e.what();<br>
+                }
+            </div>
+        </div>
+        <div class="page-num">10 / 14</div>
+    </section>
+
+    <section class="slide">
+        <div class="content">
+            <div>
+                <h2>11. Exception Safety</h2>
+                <p>Xəta zamanı proqramın davranışı:</p>
+                <ol>
+                    <li><strong>Basic Guarantee:</strong> Yaddaş sızması yoxdur.</li>
+                    <li><strong>Strong Guarantee:</strong> Əməliyyat ya tam olur, ya heç olmur.</li>
+                    <li><strong>No-throw:</strong> Xəta atmama zəmanəti.</li>
+                </ol>
+            </div>
+            <div class="code-block">
+                <span class="cmt">// noexcept açar sözü</span><br>
+                <span class="kwd">void</span> funksiya() <span class="kwd">noexcept</span> {<br>
+                &nbsp;&nbsp;<span class="cmt">// Xəta olsa terminate() olur</span><br>
+                }
+            </div>
+        </div>
+        <div class="page-num">11 / 14</div>
+    </section>
+
+    <section class="slide">
+        <div class="content">
+            <div>
+                <h2>12. Stack Unwinding</h2>
+                <p>Xəta atılanda lokal obyektlərin destruktorları avtomatik çağırılır.</p>
+                <p>Bu, yaddaş sızmasının qarşısını alır.</p>
+            </div>
+            <div class="code-block">
+                <span class="kwd">void</span> process() {<br>
+                &nbsp;&nbsp;<span class="cls">File</span> f(<span class="str">"log.txt"</span>);<br>
+                &nbsp;&nbsp;<span class="kwd">throw</span> <span class="num">1</span>; <span class="cmt">// Xəta atıldı</span><br>
+                &nbsp;&nbsp;<span class="cmt">// f destruktoru çağırılır</span><br>
+                }
+            </div>
+        </div>
+        <div class="page-num">12 / 14</div>
+    </section>
+
+    <section class="slide">
+        <div class="content">
+            <div>
+                <h2>13. Multiple Catch</h2>
+                <p><strong>Qayda:</strong> Xüsusi xətalar (derived) əvvəl, ümumi xətalar (base) sonda gəlməlidir.</p>
+            </div>
+            <div class="code-block">
+                <span class="kwd">try</span> { ... }<br>
+                <span class="kwd">catch</span> (<span class="kwd">const</span> <span class="cls">out_of_range</span>& e) {<br>
+                &nbsp;&nbsp;<span class="cmt">// Konkret xəta</span><br>
+                } <span class="kwd">catch</span> (<span class="kwd">const</span> <span class="cls">exception</span>& e) {<br>
+                &nbsp;&nbsp;<span class="cmt">// Ümumi xətalar</span><br>
+                }
+            </div>
+        </div>
+        <div class="page-num">13 / 14</div>
+    </section>
+
+    <section class="slide">
+        <div class="content">
+            <div>
+                <h2>14. Re-throwing</h2>
+                <p>Xətanı tutub sadəcə qeydə alırıqsa, onu yenidən yuxarı ata bilərik.</p>
+            </div>
+            <div class="code-block">
+                <span class="kwd">catch</span> (<span class="kwd">const</span> <span class="cls">exception</span>& e) {<br>
+                &nbsp;&nbsp;log(e.what());<br>
+                &nbsp;&nbsp;<span class="kwd">throw</span>; <span class="cmt">// Yenidən at</span><br>
+                }
+            </div>
+        </div>
+        <div class="page-num">14 / 14</div>
+    </section>
+
+    <section class="slide center-layout" id="lastSlide">
+        <div class="content">
+            <div id="typewriter" class="typewriter-text"></div><span class="cursor"></span>
+            <p style="margin-top: 30px; color: #555;">SYSTEM SHUTDOWN...</p>
+        </div>
+    </section>
+
+</div>
+
+<script>
+    const slider = document.getElementById('slider');
+    const progressBar = document.getElementById('progressBar');
+    const slides = document.querySelectorAll('.slide');
+    
+    // Klaviatura İdarəetməsi
+    document.addEventListener('keydown', function(e) {
+        const height = window.innerHeight;
+        if (e.key === 'ArrowDown' || e.key === 'ArrowRight' || e.key === ' ') {
+            slider.scrollBy({ top: height, behavior: 'smooth' });
+            e.preventDefault();
+        } else if (e.key === 'ArrowUp' || e.key === 'ArrowLeft') {
+            slider.scrollBy({ top: -height, behavior: 'smooth' });
+            e.preventDefault();
+        }
+    });
+
+    // Typewriter
+    let typed = false;
+    function typeWriter() {
+        if(typed) return;
+        const text = "TƏŞƏKKÜRLƏR";
+        const el = document.getElementById('typewriter');
+        el.innerHTML = "";
+        let i = 0;
+        function typing() {
+            if (i < text.length) {
+                el.innerHTML += text.charAt(i);
+                i++;
+                setTimeout(typing, 150);
+            }
+        }
+        typing();
+        typed = true;
+    }
+
+    // Observer
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('active');
+                if(entry.target.id === 'lastSlide') {
+                    typeWriter();
+                }
+            } else {
+                entry.target.classList.remove('active');
+                if(entry.target.id === 'lastSlide') {
+                    typed = false; 
+                }
+            }
+        });
+    }, { threshold: 0.4 });
+
+    slides.forEach(slide => {
+        observer.observe(slide);
+    });
+
+    // Progress Bar
+    slider.addEventListener('scroll', () => {
+        const scrollTop = slider.scrollTop;
+        const scrollHeight = slider.scrollHeight - slider.clientHeight;
+        const scrolled = (scrollTop / scrollHeight) * 100;
+        progressBar.style.width = scrolled + "%";
+    });
+</script>
+
+</body>
+</html>

@@ -1,0 +1,452 @@
+<!DOCTYPE html>
+<html lang="az">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Genişlənmiş Reallıq (AR) Professional Təqdimatı</title>
+    <style>
+        :root {
+            --color-primary: #01afff;
+            --color-secondary: #b603b6;
+            --color-background: #0d1117; 
+            --color-text: #e6edf3;
+            --color-highlight: #9e039e;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            overflow: hidden; 
+            background-color: var(--color-background);
+            color: var(--color-text);
+            perspective: 1000px;
+        }
+
+        #presentation-container {
+            width: 100vw;
+            height: 100vh;
+            display: flex;
+            position: relative;
+        }
+
+        .slide {
+            width: 100%;
+            height: 100%;
+            position: absolute;
+            top: 0;
+            left: 0;
+            padding: 80px 100px;
+            box-sizing: border-box;
+            opacity: 0;
+            transition: opacity 0.8s ease-in-out, transform 0.8s; 
+            display: flex;
+            align-items: center;
+            transform: translateZ(-50px);
+        }
+
+        .slide.active-slide {
+            opacity: 1;
+            z-index: 10;
+            transform: translateZ(0);
+        }
+        
+        .cover-slide {
+            background-color: #1e2a38; 
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+        }
+
+        .cover-slide h1 {
+            font-size: 5em;
+            color: var(--color-secondary);
+            text-shadow: 0 0 20px rgba(194, 5, 201, 0.5);
+            margin-bottom: 40px;
+        }
+
+        .cover-slide h3 {
+            font-size: 2em;
+            color: var(--color-primary);
+            margin: 10px 0;
+        }
+        
+        .cover-details {
+            margin-top: 50px;
+            font-size: 1.4em;
+            line-height: 2.2;
+            max-width: 60%;
+            color: #b8c9d4;
+            padding: 30px;
+            border: 1px solid var(--color-primary);
+            border-radius: 10px;
+        }
+
+        .main-title {
+            font-size: 4em;
+            color: var(--color-primary); 
+            text-shadow: 0 0 15px rgba(0, 188, 212, 0.4);
+            margin-bottom: 20px;
+        }
+
+        h2 {
+            font-size: 2.4em;
+            color: var(--color-secondary);
+            border-bottom: 3px solid var(--color-secondary);
+            padding-bottom: 10px;
+            margin-top: 0;
+            margin-bottom: 20px;
+            width: 100%;
+        }
+        
+        .slide-content-wrapper {
+            max-width: 60%;
+            z-index: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        p {
+            font-size: 1.2em;
+            line-height: 1.7;
+            margin-bottom: 15px;
+        }
+        
+        strong {
+            color: var(--color-primary);
+        }
+
+        ul {
+            list-style-type: none;
+            padding-left: 0;
+            margin-top: 10px;
+        }
+
+        ul li {
+            font-size: 1.3em;
+            margin-bottom: 12px;
+            padding-left: 35px;
+            position: relative;
+        }
+
+        ul li:before {
+            content: '➤';
+            position: absolute;
+            left: 0;
+            color: var(--color-secondary);
+            font-weight: bold;
+        }
+        
+        .visual-element {
+            position: absolute;
+            right: 100px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 30%;
+            height: 65%;
+            background-color: #1e2a38;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 188, 212, 0.2);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 1.1em;
+            color: #8197a9;
+            text-align: center;
+            padding: 20px;
+            border: 2px dashed var(--color-primary);
+            overflow: hidden;
+        }
+        
+        .highlight {
+            color: var(--color-highlight);
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+
+<div id="presentation-container">
+
+
+    <section class="slide cover-slide active-slide" id="slide1">
+        <h1>TƏQDİMAT</h1>
+        <div class="cover-details">
+            <p><strong>Mövzu:</strong> Genişlənmiş Reallıq (AR) Texnologiyası</p>
+            <p><strong>Fənn:</strong> İnformatika Və Ya Uyğun Fənn Adı</p>
+            <p><strong>Tarix:</strong> Dekabr 2025</p>
+        </div>
+        <div class="cover-details" style="margin-top: 30px; border-color: var(--color-secondary);">
+            <p><strong>Tələbə:</strong> Səməd Yolçuyev</p>
+            <p><strong>Qrup:</strong> ADNSU 681.25</p>
+        </div>
+    </section>
+
+    
+    <section class="slide" id="slide2">
+        <div class="slide-content-wrapper">
+            <h1 class="main-title">Genişlənmiş Reallıq (AR)</h1>
+            <h2 style="border-bottom: none; color: var(--color-text); font-size: 2.5em; margin-bottom: 30px;">Virtual Və Real Dünyanın Kəsişməsi</h2>
+            <p>Bu təqdimatda, biz <strong>AR-ın nə olduğunu, necə işlədiyini</strong> və həyatımızı necə dəyişdirməyə başladığını dərindən araşdıracağıq.</p>
+            <p><strong>Qısa İzah:</strong> AR real dünya üzərinə virtual obyektlər, məlumatlar və 3D modellər əlavə edən güclü bir platformadır.</p>
+        </div>
+        <div class="visual-element" style="border: none; box-shadow: none;">
+            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR_c0uRep8aDC5g0NRcgpEjSGAikgzCmfH9wA&s" 
+                alt="AR Görüntüsü" 
+                style="width:100%; height:100%; object-fit:cover; border-radius:12px;">
+        </div>
+    </section>
+
+    
+    <section class="slide" id="slide3">
+        <div class="slide-content-wrapper">
+            <h2>AR Nədir? Genişlənmiş Reallığın Dərin Tərifi</h2>
+            <p><strong>AR</strong> fiziki mühiti olduğu kimi saxlayaraq, onun üzərinə kompüter tərəfindən yaradılan rəqəmsal məzmunu canlı olaraq əlavə edir.</p>
+            <ul>
+                <li><strong>Məqsəd:</strong> Real mühiti dəyişmək yox, onu <strong>rəqəmsal məlumatla zənginləşdirməkdir</strong>.</li>
+                <li><strong>VR-dən Fərqi:</strong> VR (Virtual Reallıq) tamamilə yeni, süni bir dünya yaradır; AR isə <span class="highlight">real dünyanı interaktiv edir</span>.</li>
+            </ul>
+        </div>
+        <div class="visual-element">
+            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSqyUhlyRZNPSHhLfMPE2txO2lgcqrQwpMe7s9ZF_bd&s"
+            alt="AR görüntüsü"
+            style="width:100%; height:100%; object-fit:cover; border-radius:12px;">
+        </div>
+    </section>
+
+    
+    <section class="slide" id="slide4">
+        <div class="slide-content-wrapper">
+            <h2>Texnologiyanın Ürəyi: Proses Axını</h2>
+            <p>AR təcrübəsi üçün bu dörd mərhələ kritikdir:</p>
+            <ul>
+                <li><strong>1. Görüntü Alma (Kamera):</strong> Real mühitin video axını.</li>
+                <li><strong>2. İzləmə və Təhlil (Sensorlar):</strong> <span class="highlight">Giroskop və Akselerometr</span> cihazın mövqeyini dəqiqləşdirir.</li>
+                <li><strong>3. Renderləmə (Qrafik Mühərrik):</strong> 3D model real görüntü ilə eyni işıqlanma və perspektivdə hazırlanır.</li>
+                <li><strong>4. Əks etdirmə (Ekran):</strong> Birləşmiş görüntünün göstərilməsi.</li>
+            </ul>
+        </div>
+        <div class="visual-element">
+            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSqyUhlyRZNPSHhLfMPE2txO2lgcqrQwpMe7s9ZF_bd&s"
+            alt="AR görüntüsü"
+            style="width:100%; height:100%; object-fit:cover; border-radius:12px;">
+        </div>
+    </section>
+
+    
+    <section class="slide" id="slide5">
+        <div class="slide-content-wrapper">
+            <h2>AR Sisteminin Təməl Daşları</h2>
+            <p>AR təcrübəsinin arxasında mürəkkəb hardware və software dayanır:</p>
+            <ul>
+                <li><strong>Kamera və Sensorlar:</strong> Mühiti qəbul edir və mövqeyini izləyir.</li>
+                <li><strong>Emal Gücü:</strong> <strong>Yüksək performansı CPU/GPU</strong> real vaxt rejimində sürətli hesablama tələb edir.</li>
+                <li><strong>Proqram Təminatı:</strong> ARKit və ARCore kimi platformalar mühit tanıma alqoritmlərini işlədir.</li>
+            </ul>
+        </div>
+        <div class="visual-element">
+            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSqyUhlyRZNPSHhLfMPE2txO2lgcqrQwpMe7s9ZF_bd&s"
+            alt="AR görüntüsü"
+            style="width:100%; height:100%; object-fit:cover; border-radius:12px;">
+        </div>
+    </section>
+
+    
+    <section class="slide" id="slide6">
+        <div class="slide-content-wrapper">
+            <h2>Marker Əsaslı (Image Tracking) AR</h2>
+            <p>Bu, virtual məzmunun xüsusi bir şəkilə, loqoya və ya koda bağlı olduğu AR növüdür.</p>
+            <ul>
+                <li><strong>İş Prinsi:</strong> Kamera markeri tanıyır və onu virtual obyekt üçün <strong>"dayaq nöqtəsi"</strong> kimi istifadə edir.</li>
+                <li><strong>Üstünlük:</strong> Çox yüksək yerləşdirmə dəqiqliyi və sürətli reaksiya.</li>
+                <li><strong>Tətbiq:</strong> İnteraktiv qablaşdırmalar və reklamlar.</li>
+            </ul>
+        </div>
+        <div class="visual-element">
+            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSqyUhlyRZNPSHhLfMPE2txO2lgcqrQwpMe7s9ZF_bd&s"
+                alt="AR görüntüsü"
+                style="width:100%; height:100%; object-fit:cover; border-radius:12px;">
+        </div>
+    </section>
+
+    
+    <section class="slide" id="slide7">
+        <div class="slide-content-wrapper">
+            <h2>Markersiz (Markerless) AR</h2>
+            <p>Markersiz AR, xüsusi markerlərə ehtiyac duymadan real mühitin özünü tanıyır.</p>
+            <ul>
+                <li><strong>Səth İzləmə:</strong> Düz səthləri (masa, döşəmə) tanıyır və virtual obyektləri ora yerləşdirir.</li>
+                <li><strong>Geolokasiya:</strong> GPS və kompas əsasında <span class="highlight">geniş miqyaslı (şəhər)</span> AR üçün istifadə olunur.</li>
+                <li><strong>Əsas İstifadə:</strong> Mebel yerləşdirmə tətbiqləri.</li>
+            </ul>
+        </div>
+        <div class="visual-element">
+            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSqyUhlyRZNPSHhLfMPE2txO2lgcqrQwpMe7s9ZF_bd&s"
+            alt="AR görüntüsü"
+            style="width:100%; height:100%; object-fit:cover; border-radius:12px;">
+        </div>
+    </section>
+
+
+    <section class="slide" id="slide8">
+        <div class="slide-content-wrapper">
+            <h2>AR-ın Tətbiq Sahələri: Kross-Sektor Potensialı</h2>
+            <p>AR sadəcə əyləncə deyil, həm də iqtisadiyyatın demək olar ki, hər sektorunu çevirir.</p>
+            <ul>
+                <li><strong>Oyun və Əyləncə</strong></li>
+                <li><strong>Təhsil və Təlim</strong></li>
+                <li><strong>Tibb və Səhiyyə</strong></li>
+                <li><strong>Sənaye və Mühəndislik</strong></li>
+                <li><strong>Retail və Marketinq</strong></li>
+            </ul>
+        </div>
+        <div class="visual-element">
+            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSqyUhlyRZNPSHhLfMPE2txO2lgcqrQwpMe7s9ZF_bd&s"
+            alt="AR görüntüsü"
+            style="width:100%; height:100%; object-fit:cover; border-radius:12px;">
+        </div>
+    </section>
+
+    
+    <section class="slide" id="slide9">
+        <div class="slide-content-wrapper">
+            <h2>Əyləncədə İnqilab: AR Oyunları</h2>
+            <p>Real dünya oyunun xəritəsinə çevrilir və istifadəçilər fiziki hərəkət etməyə təşviq olunur.</p>
+            <ul>
+                <li><strong>Əsas Prinsip:</strong> Real mühitdə hərəkət edərək virtual obyektlərlə qarşılıqlı əlaqə qurmaq.</li>
+                <li><strong>Nümunə:</strong> Milyonlarla insanı küçələrə çıxaran <span class="highlight">Pokemon GO</span>.</li>
+            </ul>
+        </div>
+        <div class="visual-element">
+            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSqyUhlyRZNPSHhLfMPE2txO2lgcqrQwpMe7s9ZF_bd&s"
+            alt="AR görüntüsü"
+            style="width:100%; height:100%; object-fit:cover; border-radius:12px;">
+        </div>
+    </section>
+
+    
+    <section class="slide" id="slide10">
+        <div class="slide-content-wrapper">
+            <h2>Təhsildə Vizual Dəstək</h2>
+            <p>Mürəkkəb mövzuların anlaşılması interaktiv 3D modellər vasitəsilə asanlaşır.</p>
+            <ul>
+                <li><strong>Elm və Tibb:</strong> Anatomik modellərin və ya atom quruluşunun 3D canlandırılması.</li>
+                <li><strong>Təcrübə:</strong> Təhlükəsiz virtual laboratoriyalarda sınaqlar aparma imkanı.</li>
+            </ul>
+        </div>
+        <div class="visual-element">
+            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSqyUhlyRZNPSHhLfMPE2txO2lgcqrQwpMe7s9ZF_bd&s"
+            alt="AR görüntüsü"
+            style="width:100%; height:100%; object-fit:cover; border-radius:12px;">
+        </div>
+    </section>
+
+    
+    <section class="slide" id="slide11">
+        <div class="slide-content-wrapper">
+            <h2>Tibbi Dəqiqlik: Səhiyyə Xidmətlərində AR</h2>
+            <p>AR, cərrahiyyə və diaqnostikada xətaları minimuma endirməyə kömək edir.</p>
+            <ul>
+                <li><strong>Cərrahiyyə:</strong> Həyati məlumatların (MRT/KT datası) <span class="highlight">cərrahın görmə sahəsində</span> göstərilməsi.</li>
+                <li><strong>Təlim:</strong> Tələbələrə real mühitdə cərrahi prosesləri öyrətmək.</li>
+            </ul>
+        </div>
+        <div class="visual-element">
+            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSqyUhlyRZNPSHhLfMPE2txO2lgcqrQwpMe7s9ZF_bd&s"
+            alt="AR görüntüsü"
+            style="width:100%; height:100%; object-fit:cover; border-radius:12px;">
+        </div>
+    </section>
+
+    
+    <section class="slide" id="slide12">
+        <div class="slide-content-wrapper">
+            <h2>Retail və Marketinq</h2>
+            <p>AR istifadəçilərə məhsulları sınama və vizualizasiya imkanı verir.</p>
+            <ul>
+                <li><strong>Virtual Try-On:</strong> Paltar, ayaqqabı və kosmetika üçün.</li>
+                <li><strong>Interactive Ads:</strong> İstifadəçi real mühitdə məhsulla qarşılıqlı əlaqə qurur.</li>
+            </ul>
+        <div class="visual-element">
+            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSqyUhlyRZNPSHhLfMPE2txO2lgcqrQwpMe7s9ZF_bd&s"
+            alt="AR görüntüsü"
+            style="width:100%; height:100%; object-fit:cover; border-radius:12px;">
+        </div>
+    </section>
+
+    
+    <section class="slide" id="slide13">
+        <div class="slide-content-wrapper">
+            <h2>Sənaye və Təlim</h2>
+            <p>AR texnologiyası sənaye sahələrində təhlükəsiz təlim və əməliyyatlar üçün istifadə olunur.</p>
+            <ul>
+                <li><strong>Operator Təlimi:</strong> Çətin maşın və prosesləri real mühitdə risk olmadan öyrənmək.</li>
+                <li><strong>İstehsal:</strong> Təmir və qurulumda vizual təlimatlar.</li>
+            </ul>
+        </div>
+        <div class="visual-element">
+            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSqyUhlyRZNPSHhLfMPE2txO2lgcqrQwpMe7s9ZF_bd&s"
+            alt="AR görüntüsü"
+            style="width:100%; height:100%; object-fit:cover; border-radius:12px;">
+        </div>
+    </section>
+
+    
+    <section class="slide" id="slide14">
+        <div class="slide-content-wrapper">
+            <h2>AR ilə Memarlıq və Dizayn</h2>
+            <p>AR memarlıq layihələrinin real ölçüdə vizualizasiyasına imkan verir.</p>
+            <ul>
+                <li><strong>3D Model Preview:</strong> Layihəni yerində görmək.</li>
+                <li><strong>İnteraktiv Dəyişiklik:</strong> Rəng, material və yerləşməni real vaxtda dəyişmək.</li>
+            </ul>
+        </div>
+        <div class="visual-element">
+            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSqyUhlyRZNPSHhLfMPE2txO2lgcqrQwpMe7s9ZF_bd&s"
+            alt="AR görüntüsü"
+            style="width:100%; height:100%; object-fit:cover; border-radius:12px;">
+        </div>
+    </section>
+
+    
+    <section class="slide" id="slide15">
+        <div class="slide-content-wrapper">
+            <h2>Gələcəyə Baxış və Nəticə</h2>
+            <p>AR texnologiyası gündəlik həyatımıza daha çox inteqrasiya olunur və müxtəlif sahələrdə inqilab edir.</p>
+            <ul>
+                <li><strong>Potensial:</strong> Təhsil, səhiyyə, oyun, sənaye, ticarət.</li>
+                <li><strong>Təşəkkür:</strong> Dərslərinizi dinlədiyiniz üçün təşəkkür edirik.</li>
+            </ul>
+        </div>
+        <div class="visual-element">
+            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSqyUhlyRZNPSHhLfMPE2txO2lgcqrQwpMe7s9ZF_bd&s"
+            alt="AR görüntüsü"
+            style="width:100%; height:100%; object-fit:cover; border-radius:12px;">
+        </div>
+    </section>
+
+</div>
+
+<script>
+    let slides = document.querySelectorAll('.slide');
+    let currentIndex = 0;
+
+    document.addEventListener('keydown', function(e) {
+        if(e.key === "ArrowRight") {
+            slides[currentIndex].classList.remove('active-slide');
+            currentIndex = (currentIndex + 1) % slides.length;
+            slides[currentIndex].classList.add('active-slide');
+        }
+        if(e.key === "ArrowLeft") {
+            slides[currentIndex].classList.remove('active-slide');
+            currentIndex = (currentIndex - 1 + slides.length) % slides.length;
+            slides[currentIndex].classList.add('active-slide');
+        }
+    });
+</script>
+
+</body>
+</html>
